@@ -1,5 +1,8 @@
+'use client';
+
 import { Diamond, Menu, X } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const navLinks = [
@@ -11,8 +14,7 @@ const navLinks = [
 ];
 
 const Navbar = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -25,17 +27,17 @@ const Navbar = () => {
       {/* Desktop nav */}
       <div className="hidden md:flex items-center gap-6 mx-auto">
         {navLinks.map(({ path, label }) => (
-          <button
+          <Link
             key={path}
-            onClick={() => navigate(path)}
+            href={path}
             className={`text-[13px] font-medium transition-all duration-200 pb-0.5 border-b-2 ${
-              location.pathname === path
+              pathname === path
                 ? "text-amber-600 border-amber-500"
                 : "text-muted-foreground border-transparent hover:text-foreground"
             }`}
           >
             {label}
-          </button>
+          </Link>
         ))}
       </div>
 
@@ -60,17 +62,18 @@ const Navbar = () => {
       {mobileOpen && (
         <div className="absolute top-[52px] left-0 right-0 bg-card border-b border-border p-4 flex flex-col gap-2 md:hidden animate-fade-in z-50 shadow-lg">
           {navLinks.map(({ path, label }) => (
-            <button
+            <Link
               key={path}
-              onClick={() => { navigate(path); setMobileOpen(false); }}
-              className={`text-[14px] font-medium py-2.5 px-3 rounded-btn text-left transition-colors min-h-[44px] ${
-                location.pathname === path
+              href={path}
+              onClick={() => setMobileOpen(false)}
+              className={`text-[14px] font-medium py-2.5 px-3 rounded-btn text-left transition-colors min-h-[44px] block ${
+                pathname === path
                   ? "text-amber-600 bg-amber-50"
                   : "text-muted-foreground hover:bg-muted"
               }`}
             >
               {label}
-            </button>
+            </Link>
           ))}
           <div className="flex gap-3 mt-2 pt-2 border-t border-border">
             <button className="text-[13px] text-muted-foreground hover:text-foreground transition-colors py-2">
